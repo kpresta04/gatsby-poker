@@ -1,5 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
+import createDeck from "~/utils/createDeck"
+import "~/styles/blackjackBoard.css"
 export const query = graphql`
   query {
     cardImages: allFile(filter: { sourceInstanceName: { eq: "card-images" } }) {
@@ -18,5 +20,7 @@ export const query = graphql`
 `
 export default function Home({ data }) {
   console.log(data.cardImages)
-  return <div>Hello world!</div>
+  const deck = createDeck()
+  console.log(deck.cards[0])
+  return <div className="blackJackBoard">Hello world!</div>
 }

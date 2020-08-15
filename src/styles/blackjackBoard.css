@@ -1,0 +1,34 @@
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  margin: 0;
+}
+
+html {
+  overflow: hidden;
+}
+
+.blackJackBoard {
+  color: white;
+  height: auto;
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(#34b445, #000000);
+  background-repeat: repeat-y;
+  background-color: #000000;
+  box-shadow: 5px 1px 10px #000000;
+}
