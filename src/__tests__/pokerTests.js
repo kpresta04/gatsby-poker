@@ -1,7 +1,6 @@
 import createDeck from "../utils/createDeck"
 import { dealCards } from "../pages/index"
 import React from "react"
-import PlayingCard from "../components/PlayingCard/PlayingCard"
 import { render, fireEvent, screen } from "@testing-library/react"
 
 test("Deal check", () => {
@@ -17,9 +16,9 @@ test("<PlayingCard> src is correct", () => {
   const testHand = dealCards(1)
   const cardString = testHand[0].toString()
 
-  render(<PlayingCard shortString={cardString} />)
+  render(<img alt={cardString} />)
 
-  const pcImage = screen.getByRole("img", { name: "Playing card" })
+  const pcImage = screen.getByRole("img", { name: cardString })
 
   expect(pcImage.getAttribute("alt")).toBe(cardString)
 
