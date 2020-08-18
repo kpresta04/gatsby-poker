@@ -37,7 +37,7 @@ const createDeck = () => {
         card.shortString =
           card.shortString[0] + card.shortString[1].toLowerCase()
       } else {
-        card.shortString = card.shortString.toLowerCase()
+        card.shortString = "T" + card.shortString[2].toLowerCase()
       }
     }
   }

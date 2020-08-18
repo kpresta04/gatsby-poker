@@ -3,6 +3,8 @@ import { graphql } from "gatsby"
 import createDeck from "../utils/createDeck"
 import "../styles/blackjackBoard.css"
 import PlayingCard from "../components/PlayingCard/PlayingCard"
+// import Hand from "pokersolver"
+const Hand = require("pokersolver").Hand
 
 export const query = graphql`
   query {
@@ -31,6 +33,17 @@ export const dealCards = (numberToDeal = 0) => {
 
   deck.deal(numberToDeal, [cardArray])
   // console.log(deck.cards.length)
+  return cardArray
+}
+export const buildCardArray = (hand, boardCards) => {
+  const cardArray = []
+  hand.forEach(card => {
+    cardArray.push(card.shortString)
+  })
+  boardCards.forEach(card => {
+    cardArray.push(card.shortString)
+  })
+
   return cardArray
 }
 export default function Home({ data }) {
@@ -71,10 +84,10 @@ export default function Home({ data }) {
     "9d": data.cardImages.edges[33].node.childImageSharp.fluid,
     "9h": data.cardImages.edges[34].node.childImageSharp.fluid,
     "9s": data.cardImages.edges[35].node.childImageSharp.fluid,
-    "10c": data.cardImages.edges[36].node.childImageSharp.fluid,
-    "10d": data.cardImages.edges[37].node.childImageSharp.fluid,
-    "10h": data.cardImages.edges[38].node.childImageSharp.fluid,
-    "10s": data.cardImages.edges[39].node.childImageSharp.fluid,
+    Tc: data.cardImages.edges[36].node.childImageSharp.fluid,
+    Td: data.cardImages.edges[37].node.childImageSharp.fluid,
+    Th: data.cardImages.edges[38].node.childImageSharp.fluid,
+    Ts: data.cardImages.edges[39].node.childImageSharp.fluid,
     Jc: data.cardImages.edges[40].node.childImageSharp.fluid,
     Jd: data.cardImages.edges[41].node.childImageSharp.fluid,
     Jh: data.cardImages.edges[42].node.childImageSharp.fluid,
@@ -91,16 +104,28 @@ export default function Home({ data }) {
   }
 
   const [humanHand, setHumanHand] = useState([])
+  const [boardCards, setBoardCards] = useState([])
+
   // console.log(data.cardImages.edges[52])
 
   // console.log(deck.cards[0])
   useEffect(() => {
     setHumanHand(dealCards(2))
+    setBoardCards(dealCards(3))
     // console.log(imageDict[humanHand[0].shortString])
   }, [])
   return (
     <div className="blackJackBoard">
-      <div>
+      <div className="cardDiv boardCardDiv">
+        {boardCards.map((card, index) => (
+          <PlayingCard
+            key={index}
+            shortString={card.toString()}
+            fluid={imageDict[card.shortString]}
+          />
+        ))}
+      </div>
+      <div className="humanHandDiv cardDiv">
         {humanHand.map((card, index) => (
           <PlayingCard
             key={index}
@@ -108,6 +133,15 @@ export default function Home({ data }) {
             fluid={imageDict[card.shortString]}
           />
         ))}
+        <button
+          onClick={() => {
+            const cardArray = buildCardArray(humanHand, boardCards)
+            const info = Hand.solve(cardArray)
+            console.log(info)
+          }}
+        >
+          Solve
+        </button>
       </div>
     </div>
   )
