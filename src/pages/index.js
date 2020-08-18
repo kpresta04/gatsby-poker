@@ -32,7 +32,7 @@ export const dealCards = (numberToDeal = 0) => {
   let cardArray = []
 
   deck.deal(numberToDeal, [cardArray])
-  // console.log(deck.cards.length)
+  // console.log(cardArray[0].toString())
   return cardArray
 }
 export const buildCardArray = (hand, boardCards) => {
@@ -45,6 +45,50 @@ export const buildCardArray = (hand, boardCards) => {
   })
 
   return cardArray
+}
+export const getHandScore = (hand, boardCards) => {
+  const cardArray = buildCardArray(hand, boardCards)
+  const handScore = Hand.solve(cardArray)
+  return handScore
+}
+export const getWinner = (playerHand, oppHand, boardCards) => {
+  // const playerCardArray = buildCardArray(playerHand, boardCards)
+  // const oppCardArray = buildCardArray(oppHand, boardCards)
+
+  const playerScore = getHandScore(playerHand, boardCards)
+  const oppScore = getHandScore(oppHand, boardCards)
+
+  const result = Hand.winners([playerScore, oppScore])
+  // console.log(result)
+  // console.log("player score: ", playerScore)
+  // console.log("opp score: ", oppScore)
+
+  // console.log("Winning hand: ", result)
+  // console.log(result[0].descr)
+  // console.log(result)
+
+  if (result[0].cardPool === playerScore.cardPool && result.length === 1) {
+    return {
+      name: "player",
+      descr: playerScore.descr,
+      oppDescr: oppScore.descr,
+      cardPool: playerScore.cardPool,
+    }
+  } else if (result[0].cardPool === oppScore.cardPool && result.length === 1) {
+    return {
+      name: "opponent",
+      descr: playerScore.descr,
+      cardPool: oppScore.cardPool,
+      oppDescr: oppScore.descr,
+    }
+  } else {
+    return {
+      name: "tie",
+      descr: playerScore.descr,
+      oppDescr: oppScore.descr,
+      cardPool: playerScore.cardPool,
+    }
+  }
 }
 export default function Home({ data }) {
   const imageDict = {
@@ -105,17 +149,29 @@ export default function Home({ data }) {
 
   const [humanHand, setHumanHand] = useState([])
   const [boardCards, setBoardCards] = useState([])
+  const [oppHand, setOppHand] = useState([])
 
   // console.log(data.cardImages.edges[52])
 
   // console.log(deck.cards[0])
   useEffect(() => {
     setHumanHand(dealCards(2))
+    setOppHand(dealCards(2))
     setBoardCards(dealCards(3))
     // console.log(imageDict[humanHand[0].shortString])
   }, [])
   return (
     <div className="blackJackBoard">
+      <div className="cardDiv oppCardDiv">
+        {oppHand.map((card, index) => (
+          <PlayingCard
+            key={index}
+            ai={true}
+            shortString={card.toString()}
+            fluid={imageDict["Back"]}
+          />
+        ))}
+      </div>
       <div className="cardDiv boardCardDiv">
         {boardCards.map((card, index) => (
           <PlayingCard
@@ -135,9 +191,11 @@ export default function Home({ data }) {
         ))}
         <button
           onClick={() => {
-            const cardArray = buildCardArray(humanHand, boardCards)
-            const info = Hand.solve(cardArray)
-            console.log(info)
+            const winner = getWinner(humanHand, oppHand, boardCards)
+            console.log(`Player hand: ${winner.descr}`)
+            console.log(`Opponent hand: ${winner.oppDescr}`)
+
+            console.log("Winner is: " + winner.name)
           }}
         >
           Solve

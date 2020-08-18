@@ -31,7 +31,9 @@ html {
   background-repeat: repeat-y;
   background-color: #000000;
   box-shadow: 5px 1px 10px #000000;
-  position: relative;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
 }
 
 .cardDiv {
@@ -42,15 +44,18 @@ html {
 }
 .boardCardDiv {
   width: 100%;
-  position: absolute;
+  grid-row: 2 / span 2;
+  /* grid-column: 2 / span 3; */
+  /* position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -160%);
+  transform: translate(-50%, -160%); */
 }
 .humanHandDiv {
   width: 100%;
-  position: absolute;
+  grid-row: 4;
+  /* position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 80%);
+  transform: translate(-50%, 80%); */
 }
