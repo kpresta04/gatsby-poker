@@ -46,6 +46,10 @@ export const buildCardArray = (hand, boardCards) => {
 
   return cardArray
 }
+const players = {
+  human: { chips: 5000, cards: [] },
+  opponent: { chips: 5000, cards: [] },
+}
 export const getHandScore = (hand, boardCards) => {
   const cardArray = buildCardArray(hand, boardCards)
   const handScore = Hand.solve(cardArray)
@@ -146,23 +150,49 @@ export default function Home({ data }) {
     Ks: data.cardImages.edges[51].node.childImageSharp.fluid,
     Back: data.cardImages.edges[52].node.childImageSharp.fluid,
   }
-
+  const [playersInfo, setPlayersInfo] = useState(players)
   const [humanHand, setHumanHand] = useState([])
   const [boardCards, setBoardCards] = useState([])
   const [oppHand, setOppHand] = useState([])
+  const bigBlind = 20
+  const smallBlind = 10
+  let bigBlindIndex = 1
 
+  const getbigBlindIndex = () => {
+    if (bigBlindIndex === 0) {
+      bigBlindIndex = 1
+    } else {
+      bigBlindIndex = 0
+    }
+  }
   // console.log(data.cardImages.edges[52])
+  const startGame = () => {
+    console.log(playersInfo)
+  }
 
   // console.log(deck.cards[0])
   useEffect(() => {
     setHumanHand(dealCards(2))
     setOppHand(dealCards(2))
     setBoardCards(dealCards(3))
+    startGame()
     // console.log(imageDict[humanHand[0].shortString])
   }, [])
   return (
     <div className="blackJackBoard">
       <div className="cardDiv oppCardDiv">
+        <p
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            fontSize: "1.5rem",
+            textShadow: "5px",
+            margin: "1em",
+          }}
+        >
+          Gatsby Poker
+        </p>
         {oppHand.map((card, index) => (
           <PlayingCard
             key={index}
@@ -189,18 +219,18 @@ export default function Home({ data }) {
             fluid={imageDict[card.shortString]}
           />
         ))}
-        <button
-          onClick={() => {
-            const winner = getWinner(humanHand, oppHand, boardCards)
-            console.log(`Player hand: ${winner.descr}`)
-            console.log(`Opponent hand: ${winner.oppDescr}`)
-
-            console.log("Winner is: " + winner.name)
-          }}
-        >
-          Solve
-        </button>
       </div>
+      {/* <button
+        onClick={() => {
+          const winner = getWinner(humanHand, oppHand, boardCards)
+          console.log(`Player hand: ${winner.descr}`)
+          console.log(`Opponent hand: ${winner.oppDescr}`)
+
+          console.log("Winner is: " + winner.name)
+        }}
+      >
+        Solve
+      </button> */}
     </div>
   )
 }

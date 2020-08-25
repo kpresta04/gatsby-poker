@@ -14,6 +14,7 @@ html,
 body {
   height: 100%;
   width: 100%;
+  font-family: "Lobster";
   position: fixed;
   margin: 0;
 }
@@ -44,7 +45,7 @@ html {
 }
 .boardCardDiv {
   width: 100%;
-  grid-row: 2 / span 2;
+  grid-row: 3;
   /* grid-column: 2 / span 3; */
   /* position: absolute;
   top: 50%;
@@ -53,9 +54,13 @@ html {
 }
 .humanHandDiv {
   width: 100%;
-  grid-row: 4;
+  grid-row: 4 / span 2;
   /* position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, 80%); */
+}
+.oppCardDiv {
+  position: relative;
+  grid-row: 1 / span 2;
 }
